@@ -3,6 +3,7 @@ package data
 import (
 	"context"
 	"fmt"
+	"strings"
 
 	"github.com/samber/lo"
 )
@@ -37,6 +38,13 @@ func (o *OpenAi) GetTemperature() float64  { return o.Temperature }
 func (o *OpenAi) GetTimeout() int          { return o.TimeOut }
 func (o *OpenAi) IsHttpProxyEnabled() bool { return o.HttpProxyEnabled }
 func (o *OpenAi) GetHttpProxy() string     { return o.HttpProxy }
+
+// IsMiniMax 判断是否使用 MiniMax 模型（MiniMax 不完全支持 function calling）
+func (o *OpenAi) IsMiniMax() bool {
+	base := strings.ToLower(o.BaseUrl)
+	model := strings.ToLower(o.Model)
+	return strings.Contains(base, "minimax") || strings.Contains(model, "minimax")
+}
 
 func (o OpenAi) String() string {
 	return fmt.Sprintf("OpenAi{BaseUrl: %s, Model: %s, MaxTokens: %d, Temperature: %.2f, Prompt: %s, TimeOut: %d, QuestionTemplate: %s, CrawlTimeOut: %d, KDays: %d, BrowserPath: %s, ApiKey: [MASKED]}",

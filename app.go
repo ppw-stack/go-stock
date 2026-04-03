@@ -93,15 +93,28 @@ func (a *App) removeCronEntry(key string) {
 }
 
 func (a *App) GetSponsorInfo() map[string]any {
-	return a.SponsorInfo
+	// TODO: 临时移除VIP限制，自用版本
+	info := map[string]any{
+		"vipLevel":    2,
+		"vipStartTime": "2024-01-01 00:00:00",
+		"vipEndTime":   "2099-12-31 23:59:59",
+		"vipAuthTime":  "2024-01-01 00:00:00",
+	}
+	// 合并原始数据
+	for k, v := range a.SponsorInfo {
+		info[k] = v
+	}
+	// 确保vipLevel为2
+	info["vipLevel"] = 2
+	return info
 }
 
 // GetEffectiveSponsorVip 从本地配置解密赞助信息并判断当前是否在 VIP 有效期内（与 ai-assistant-web / data.EffectiveSponsorVipLevel 一致）。
 func (a *App) GetEffectiveSponsorVip() map[string]any {
-	level, active := data.EffectiveSponsorVipLevel()
+	// TODO: 临时移除VIP限制，自用版本
 	return map[string]any{
-		"vipLevel": level,
-		"active":   active,
+		"vipLevel": 2,
+		"active":    true,
 	}
 }
 func (a *App) CheckSponsorCode(sponsorCode string) map[string]any {

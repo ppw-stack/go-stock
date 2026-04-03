@@ -146,7 +146,12 @@ func (o *OpenAi) NewSummaryStockNewsStreamWithTools(userQuestion string, sysProm
 			"role":    "user",
 			"content": userQuestion,
 		})
-		AskAiWithTools(o, errors.New(""), msg, ch, userQuestion, tools, thinking)
+		// MiniMax 不完全支持 function calling，使用普通对话模式
+		if !o.IsMiniMax() && len(tools) > 0 {
+			AskAiWithTools(o, errors.New(""), msg, ch, userQuestion, tools, thinking)
+		} else {
+			AskAi(o, errors.New(""), msg, ch, userQuestion, thinking)
+		}
 	}()
 	return ch
 }
@@ -592,7 +597,8 @@ func (o *OpenAi) NewChatStream(stock, stockCode, userQuestion string, sysPromptI
 			"content": question,
 		})
 
-		if tools != nil && len(tools) > 0 {
+		// MiniMax 不完全支持 function calling，使用普通对话模式
+		if !o.IsMiniMax() && tools != nil && len(tools) > 0 {
 			AskAiWithTools(o, errors.New(""), msg, ch, question, tools, thinking)
 		} else {
 			AskAi(o, errors.New(""), msg, ch, question, thinking)

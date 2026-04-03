@@ -632,26 +632,6 @@ const menuOptions = ref([
     icon: renderIcon(SettingsOutline),
   },
   {
-    label: () =>
-        h(
-            RouterLink,
-            {
-              to: {
-                name: 'about',
-                query: {
-                  name:"关于",
-                }
-              },
-              onClick: () => {
-                activeKey.value = 'about'
-              },
-            },
-            {default: () => '关于'}
-        ),
-    key: 'about',
-    icon: renderIcon(LogoGithub),
-  },
-  {
     show:false,
     label: () => h("a", {
       href: '#',

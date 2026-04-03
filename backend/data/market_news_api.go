@@ -351,6 +351,9 @@ func (m MarketNewsApi) GlobalStockIndexes(crawlTimeOut uint) map[string]any {
 	js := string(response.Body())
 	res := make(map[string]any)
 	json.Unmarshal([]byte(js), &res)
+	if res["data"] == nil {
+		return make(map[string]any)
+	}
 	return res["data"].(map[string]any)
 }
 
